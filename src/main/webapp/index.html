@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="js/echarts.min.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+    <style>
+        body{
+            text-align:center;
+            background-color: #dbdddd;
+        }
+        .div{ margin:0 auto; width:1000px; height:800px; border:1px solid #F00}
+        /* css注释：为了观察效果设置宽度 边框 高度等样式 */
+    </style>
+
+</head>
+<body>
+<h1>商品销售额汇总分析</h1>
+<div>
+    <div id="main" style="width:880px;height: 700px;float:left;">第一个</div>
+    <div id="sum" style="width:800px;height: 700px;float:left;">第二个</div>
+</div>
+
+<!--<div>-->
+    <!--<input type="submit" value="实时分析" onclick="start()" />-->
+<!--</div>-->
+
+<div id="messages"></div>
+<script type="text/javascript">
+
+    $.get('http://localhost:8081/getPart31', function (res) {
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            backgroundColor: '#ffffff',//背景色
+            title: {
+                text: '商品销售额汇总',
+                subtext: '',
+                textStyle: {
+                    fontWeight: 'normal',              //标题颜色
+                    color: '#408829'
+                },
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['销售额']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data:res.key
+            },
+            series: [
+                {
+                    name: '销售额',
+                    type: 'bar',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight'
+                        }
+                    },
+                    itemStyle:{ normal:{color:'#f47209'} },
+                    data: res.val
+                }
+            ]
+        };
+        myChart.setOption(option);
+    });
+
+
+    // $.get('http://localhost:8080/getPart3', function (res) {
+    //     var myChart_sum = echarts.init(document.getElementById('sum'));
+    //     var option = {
+    //         backgroundColor: '#fbfbfb',//背景色
+    //         title: {
+    //             text: '新闻话题曝光量【实时】统计',
+    //             subtext: '数据来自搜狗实验室'
+    //         },
+    //
+    //         tooltip : {
+    //             formatter: "{a} <br/>{b} : {c}%"
+    //         },
+    //         toolbox: {
+    //             feature: {
+    //                 restore: {},
+    //                 saveAsImage: {}
+    //             }
+    //         },
+    //         series: [
+    //             {
+    //                 name: '业务指标',
+    //                 type: 'gauge',
+    //                 max:50000,
+    //                 detail: {formatter:'{value}个话题'},
+    //                 data: [{value: 50, name: '话题曝光量'}]
+    //             }
+    //         ]
+    //     };
+    //
+    //     option.series[0].data[0].value = res;
+    //     myChart_sum.setOption(option, true);
+    // });
+
+
+</script>
+</body>
+</html>
